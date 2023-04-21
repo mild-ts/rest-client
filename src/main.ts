@@ -1,30 +1,54 @@
+import axios, { AxiosRequestConfig } from 'axios';
 
-export type TupleToObjectSymbol<T extends readonly string[]> = {
-  [K in T[number]]: ReturnType<typeof Symbol.for>;
+interface RestClientOptions {
+  /**
+   * Axios Request time out, default: 60 minutes
+   */
+  requestTimeout?: number;
 }
 
 /**
- * Create Record of string and Symbol of the key
+ * REST API client
+ * @ref Inspired API design by GitHub REST API client
  *
- * @example
- * ```ts
-  import { createSymbolRecord } from '@mild-ts/utils';
-
-  export const Tokens = createSymbolRecord('HealthAlertOption', 'SlackOption');
-
-  // Equivalent to
-  export const Tokens = {
-    HealthAlertOption: Symbol.for('HealthAlertOption'),
-    SlackOption: Symbol.for('SlackOption'),
-  }
-  ```
- * @param keys array of strings
- * @returns the record
+ * Inspire https://github.com/microsoft/typed-rest-client
  */
 
-export function createSymbolRecord<const T extends readonly string[]>(...keys: T): TupleToObjectSymbol<T>{
-  return keys.reduce((result: any, v: string) => {
-    result[v] = Symbol.for(v);
-    return result;
-  }, {});
+export class RestClient {
+  private _timeout: number;
+
+  constructor(private _option?: RestClientOptions) {
+    this._timeout = _option?.requestTimeout ?? 60 * 60 * 1000;
+  }
+
+  public async request(methodWithURL: string, pathParamsOption: Record<string, string>, option?: AxiosRequestConfig) {
+    const { method, url } = this._parseRequestURL(methodWithURL);
+    const urlWithParams = this._replaceParams(url, pathParamsOption);
+    return await this._send(urlWithParams, method, option);
+  }
+
+  private _parseRequestURL(methodWithURL: string) {
+    const split = methodWithURL.split(' ');
+    if (split.length !== 2) throw new Error(`Invalid methodWithURL: ${methodWithURL}`);
+    const [method, url] = split;
+    if (!['get', 'post', 'put', 'delete'].includes(method.toLowerCase())) throw new Error(`Invalid method: ${method}`);
+    return { method, url };
+  }
+
+  private _replaceParams(url: string, pathParamsOptions: Record<string, string>): string {
+    for (const [key, value] of Object.entries(pathParamsOptions)) {
+      url = url.replace(`{${key}}`, value);
+    }
+    return url;
+  }
+
+  private async _send(url: string, method: string = 'get', option?: AxiosRequestConfig) {
+    return await axios({
+      timeout: this._timeout,
+      // Override with custom option
+      ...option,
+      url,
+      method,
+    });
+  }
 }
