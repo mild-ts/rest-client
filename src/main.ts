@@ -1,10 +1,14 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
-export interface RestClientOptions {
+export type RestClientRequestConfig = {
+  params: Record<string, string>
+};
+
+export interface RestClientaxiosConfigs {
   /**
-   * Axios Request time out, default: 60 minutes
+   * Axios Request Config
    */
-  requestTimeout?: number;
+  axiosConfig?: AxiosRequestConfig;
 }
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
@@ -17,41 +21,41 @@ export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
  */
 
 export class RestClient {
-  private _timeout: number;
+  private _rootAxiosConfig: AxiosRequestConfig;
 
-  constructor(private _option?: RestClientOptions) {
-    this._timeout = _option?.requestTimeout ?? 60 * 60 * 1000;
+  constructor(config?: RestClientaxiosConfigs) {
+    this._rootAxiosConfig = config?.axiosConfig ?? {};
   }
 
-  public async get(url: string, uriParams: Record<string, string>, option?: AxiosRequestConfig) {
-    return await this._parseRequest('GET', url, uriParams, option);
+  public async get(url: string, requestConfig: RestClientRequestConfig, axiosConfig?: AxiosRequestConfig) {
+    return await this._parseRequest('GET', url, requestConfig, axiosConfig);
   }
 
-  public async post(url: string, uriParams: Record<string, string>, option?: AxiosRequestConfig) {
-    return await this._parseRequest('POST', url, uriParams, option);
+  public async post(url: string, requestConfig: RestClientRequestConfig, axiosConfig?: AxiosRequestConfig) {
+    return await this._parseRequest('POST', url, requestConfig, axiosConfig);
   }
 
-  public async put(url: string, uriParams: Record<string, string>, option?: AxiosRequestConfig) {
-    return await this._parseRequest('PUT', url, uriParams, option);
+  public async put(url: string, requestConfig: RestClientRequestConfig, axiosConfig?: AxiosRequestConfig) {
+    return await this._parseRequest('PUT', url, requestConfig, axiosConfig);
   }
 
-  public async delete(url: string, uriParams: Record<string, string>, option?: AxiosRequestConfig) {
-    return await this._parseRequest('DELETE', url, uriParams, option);
+  public async delete(url: string, requestConfig: RestClientRequestConfig, axiosConfig?: AxiosRequestConfig) {
+    return await this._parseRequest('DELETE', url, requestConfig, axiosConfig);
   }
 
-  public async request(methodWithURL: string, uriParams: Record<string, string>, option?: AxiosRequestConfig) {
+  public async request(methodWithURL: string, requestConfig: RestClientRequestConfig, axiosConfig?: AxiosRequestConfig) {
     const { method, url } = this._parseRequestURL(methodWithURL);
-    return this._parseRequest(method as HttpMethod, url, uriParams, option);
+    return this._parseRequest(method as HttpMethod, url, requestConfig, axiosConfig);
   }
 
   private async _parseRequest(
     method: HttpMethod,
     url: string,
-    uriParams: Record<string, string>,
-    option?: AxiosRequestConfig
+    requestConfig: RestClientRequestConfig,
+    axiosConfig?: AxiosRequestConfig
   ) {
-    const urlWithParams = this._replaceParams(url, uriParams);
-    return await this._send(urlWithParams, method, option);
+    const urlWithParams = this._replaceParams(url, requestConfig.params);
+    return await this._send(urlWithParams, method, axiosConfig);
   }
 
   private _parseRequestURL(methodWithURL: string) {
@@ -62,18 +66,19 @@ export class RestClient {
     return { method, url };
   }
 
-  private _replaceParams(url: string, uriParams: Record<string, string>): string {
-    for (const [key, value] of Object.entries(uriParams)) {
+  private _replaceParams(url: string, params: RestClientRequestConfig['params']): string {
+    for (const [key, value] of Object.entries(params)) {
       url = url.replace(`{${key}}`, value);
     }
     return url;
   }
 
-  private async _send(url: string, method: string = 'get', option?: AxiosRequestConfig) {
-    return await axios({
-      timeout: this._timeout,
-      // Override with custom option
-      ...option,
+  private async _send(url: string, method: string = 'get', axiosConfig?: AxiosRequestConfig) {
+    return await axios.create().request({
+      // Override with root axiosConfig
+      ...this._rootAxiosConfig,
+      // Override with custom axiosConfig
+      ...axiosConfig,
       url,
       method,
     });
