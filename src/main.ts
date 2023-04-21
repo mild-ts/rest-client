@@ -1,7 +1,10 @@
 import axios, { AxiosRequestConfig } from 'axios';
+import { ExtractParamsFromRestURL, ExtractParamsFromURL } from './types';
 
-export type RestClientRequestConfig = {
-  params: Record<string, string>
+type GetParams<WithMethod, T> = WithMethod extends true ? ExtractParamsFromRestURL<T> : ExtractParamsFromURL<T>;
+
+export type RestClientRequestConfig<WithMethod = false, T = any> = {
+  params: GetParams<WithMethod, T>;
 };
 
 export interface RestClientaxiosConfigs {
@@ -27,23 +30,43 @@ export class RestClient {
     this._rootAxiosConfig = config?.axiosConfig ?? {};
   }
 
-  public async get(url: string, requestConfig: RestClientRequestConfig, axiosConfig?: AxiosRequestConfig) {
+  public async get<T extends string>(
+    url: T,
+    requestConfig: RestClientRequestConfig<false, T>,
+    axiosConfig?: AxiosRequestConfig
+  ) {
     return await this._parseRequest('GET', url, requestConfig, axiosConfig);
   }
 
-  public async post(url: string, requestConfig: RestClientRequestConfig, axiosConfig?: AxiosRequestConfig) {
+  public async post<T extends string>(
+    url: T,
+    requestConfig: RestClientRequestConfig<false, T>,
+    axiosConfig?: AxiosRequestConfig
+  ) {
     return await this._parseRequest('POST', url, requestConfig, axiosConfig);
   }
 
-  public async put(url: string, requestConfig: RestClientRequestConfig, axiosConfig?: AxiosRequestConfig) {
+  public async put<T extends string>(
+    url: T,
+    requestConfig: RestClientRequestConfig<false, T>,
+    axiosConfig?: AxiosRequestConfig
+  ) {
     return await this._parseRequest('PUT', url, requestConfig, axiosConfig);
   }
 
-  public async delete(url: string, requestConfig: RestClientRequestConfig, axiosConfig?: AxiosRequestConfig) {
+  public async delete<T extends string>(
+    url: T,
+    requestConfig: RestClientRequestConfig<false, T>,
+    axiosConfig?: AxiosRequestConfig
+  ) {
     return await this._parseRequest('DELETE', url, requestConfig, axiosConfig);
   }
 
-  public async request(methodWithURL: string, requestConfig: RestClientRequestConfig, axiosConfig?: AxiosRequestConfig) {
+  public async request<T extends string>(
+    methodWithURL: T,
+    requestConfig: RestClientRequestConfig<true, T>,
+    axiosConfig?: AxiosRequestConfig
+  ) {
     const { method, url } = this._parseRequestURL(methodWithURL);
     return this._parseRequest(method as HttpMethod, url, requestConfig, axiosConfig);
   }
@@ -68,7 +91,7 @@ export class RestClient {
 
   private _replaceParams(url: string, params: RestClientRequestConfig['params']): string {
     for (const [key, value] of Object.entries(params)) {
-      url = url.replace(`{${key}}`, value);
+      url = url.replace(`{${key}}`, value as string);
     }
     return url;
   }
