@@ -5,20 +5,20 @@ export type TupleToObjectSymbol<T extends readonly string[]> = {
 
 /**
  * Create Record of string and Symbol of the key
- * 
+ *
  * @example
  * ```ts
   import { createSymbolRecord } from '@mild-ts/utils';
 
   export const Tokens = createSymbolRecord('HealthAlertOption', 'SlackOption');
 
-  // Equivalent to 
+  // Equivalent to
   export const Tokens = {
     HealthAlertOption: Symbol.for('HealthAlertOption'),
     SlackOption: Symbol.for('SlackOption'),
   }
   ```
- * @param keys array of strings 
+ * @param keys array of strings
  * @returns the record
  */
 
