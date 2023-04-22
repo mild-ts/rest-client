@@ -18,6 +18,24 @@ export class RestClient {
     this._axiosInstance = config?.axiosInstance ?? axios.create();
   }
 
+  /**
+   * Make a request with GET method
+   *
+   * @example
+   *
+   * const res = await client.get('https://domain.com/posts/{postId}', {
+      params: {
+        postId: 1,
+      },
+    });
+    console.log(res.data);
+   *
+   * @param url url
+   * @param requestConfig Request config
+   * @param axiosConfig Axios Request config
+   * @returns AxiosResponse
+   */
+
   public async get<T extends string>(
     url: T,
     requestConfig: RestClientRequestConfig<false, T>,
@@ -26,6 +44,13 @@ export class RestClient {
     return await this._parseRequest('GET', url, requestConfig, axiosConfig);
   }
 
+  /**
+   * Make a request with POST method
+   * @param url url
+   * @param requestConfig Request config
+   * @param axiosConfig Axios Request config
+   * @returns AxiosResponse
+   */
   public async post<T extends string>(
     url: T,
     requestConfig: RestClientRequestConfig<false, T>,
@@ -34,6 +59,13 @@ export class RestClient {
     return await this._parseRequest('POST', url, requestConfig, axiosConfig);
   }
 
+  /**
+   * Make a request with PUT method
+   * @param url url
+   * @param requestConfig Request config
+   * @param axiosConfig Axios Request config
+   * @returns AxiosResponse
+   */
   public async put<T extends string>(
     url: T,
     requestConfig: RestClientRequestConfig<false, T>,
@@ -42,6 +74,13 @@ export class RestClient {
     return await this._parseRequest('PUT', url, requestConfig, axiosConfig);
   }
 
+  /**
+   * Make a request with PUT method
+   * @param url url
+   * @param requestConfig Request config
+   * @param axiosConfig Axios Request config
+   * @returns AxiosResponse
+   */
   public async delete<T extends string>(
     url: T,
     requestConfig: RestClientRequestConfig<false, T>,
@@ -50,8 +89,25 @@ export class RestClient {
     return await this._parseRequest('DELETE', url, requestConfig, axiosConfig);
   }
 
-  public async request<T extends string>(
-    methodWithURL: `${Method} ${string}`,
+  /**
+   * Make a request with method and url
+   * @example
+   *
+   * const res = await client.request('GET https://domain.com/posts/{postId}', {
+      params: {
+        postId: 1
+      },
+    });
+    console.log(res.data);
+
+   * @param methodWithURL Method and URL
+   * @param requestConfig Request config
+   * @param axiosConfig Axios Request config
+   * @returns AxiosResponse
+   */
+
+  public async request<T extends `${Method} ${string}`>(
+    methodWithURL: T,
     requestConfig: RestClientRequestConfig<true, T>,
     axiosConfig?: AxiosRequestConfig
   ) {
