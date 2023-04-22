@@ -5,6 +5,11 @@
   "main": "./dist/main.js",
   "module": "./dist/main.mjs",
   "types": "./dist/main.d.ts",
+  "files": [
+    "dist/**",
+    "src/**",
+    "examples/**"
+  ],
   "scripts": {
     "all": "run-s lint test build",
     "build": "tsup src/main.ts --dts --format esm,cjs",
