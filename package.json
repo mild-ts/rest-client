@@ -8,7 +8,6 @@
   "scripts": {
     "all": "run-s lint test build",
     "build": "tsup src/main.ts --dts --format esm,cjs",
-    "prepublishOnly": "npm run build",
     "release": "npm run build && changeset publish",
     "lint": "tsc --noEmit",
     "test": "ava"
