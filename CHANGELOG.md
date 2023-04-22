@@ -1,11 +1,5 @@
 # @mild-ts/rest-client
 
-## 0.1.5
-
-### Patch Changes
-
-- 52bb2ae: Publish dist from changesets (3)
-
 ## 0.1.2
 
 ### Patch Changes
