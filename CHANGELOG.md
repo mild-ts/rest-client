@@ -1,5 +1,11 @@
 # @mild-ts/rest-client
 
+## 0.1.6
+
+### Patch Changes
+
+- e53e14b: Fix: publish dist
+
 ## 0.1.2
 
 ### Patch Changes
