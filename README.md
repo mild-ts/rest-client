@@ -2,6 +2,8 @@
 
 Opinionated TypeScript Utility Libraries [@mild-ts](https://github.com/mildronize/mild-ts)
 
+[![CI](https://github.com/mild-ts/rest-client/actions/workflows/main.yml/badge.svg)](https://github.com/mild-ts/rest-client/actions/workflows/main.yml)
+
 ## Installation
 ```
 npm i @mild-ts/rest-client
