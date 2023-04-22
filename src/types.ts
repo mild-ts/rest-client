@@ -1,3 +1,4 @@
+import { AxiosInstance, AxiosRequestConfig } from "axios";
 import { Pipe, Objects, Strings, ComposeLeft, Tuples, Match } from "hotscript";
 
 export type ExtractParamsFromURL<T> = Pipe<
@@ -37,3 +38,23 @@ export type ExtractParamsFromRestURL<T> = ExtractParamsFromURL<Pipe<
 type T = ExtractParamsFromRestURL<'GET https://jsonplaceholder.typicode.com/posts/{postId}/comments/{commentId}'>;
   // ^?
 
+type GetParams<WithMethod, T> = WithMethod extends true ? ExtractParamsFromRestURL<T> : ExtractParamsFromURL<T>;
+
+export type RestClientRequestConfig<WithMethod = false, T = any> = {
+  params: GetParams<WithMethod, T>;
+};
+
+export interface RestClientAxiosConfigs {
+  /**
+   * Add your own axios instance
+   *
+   * @default axios.create()
+   */
+  axiosInstance?: AxiosInstance;
+  /**
+   * Add your own default axios config
+   *
+   * @default {}
+   */
+  axiosConfig?: AxiosRequestConfig;
+}
