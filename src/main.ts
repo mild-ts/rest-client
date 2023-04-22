@@ -111,7 +111,7 @@ export class RestClient {
   }
 
   private async _send(url: string, method: Method = 'get', axiosConfig?: AxiosRequestConfig) {
-    return await this._axiosInstance.request({
+    return await this._axiosInstance.request<unknown>({
       // Override with root axiosConfig
       ...this._rootAxiosConfig,
       // Override with custom axiosConfig
