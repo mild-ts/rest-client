@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig } from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig, Method } from 'axios';
 import { ExtractParamsFromRestURL, ExtractParamsFromURL } from './types';
 
 type GetParams<WithMethod, T> = WithMethod extends true ? ExtractParamsFromRestURL<T> : ExtractParamsFromURL<T>;
@@ -7,14 +7,20 @@ export type RestClientRequestConfig<WithMethod = false, T = any> = {
   params: GetParams<WithMethod, T>;
 };
 
-export interface RestClientaxiosConfigs {
+export interface RestClientAxiosConfigs {
   /**
-   * Axios Request Config
+   * Add your own axios instance
+   *
+   * @default axios.create()
+   */
+  axiosInstance?: AxiosInstance;
+  /**
+   * Add your own default axios config
+   *
+   * @default {}
    */
   axiosConfig?: AxiosRequestConfig;
 }
-
-export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
 /**
  * REST API client
@@ -24,10 +30,12 @@ export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
  */
 
 export class RestClient {
+  private _axiosInstance: AxiosInstance;
   private _rootAxiosConfig: AxiosRequestConfig;
 
-  constructor(config?: RestClientaxiosConfigs) {
+  constructor(config?: RestClientAxiosConfigs) {
     this._rootAxiosConfig = config?.axiosConfig ?? {};
+    this._axiosInstance = config?.axiosInstance ?? axios.create();
   }
 
   public async get<T extends string>(
@@ -63,16 +71,16 @@ export class RestClient {
   }
 
   public async request<T extends string>(
-    methodWithURL: T,
+    methodWithURL: `${Method} ${string}`,
     requestConfig: RestClientRequestConfig<true, T>,
     axiosConfig?: AxiosRequestConfig
   ) {
     const { method, url } = this._parseRequestURL(methodWithURL);
-    return this._parseRequest(method as HttpMethod, url, requestConfig, axiosConfig);
+    return this._parseRequest(method, url, requestConfig, axiosConfig);
   }
 
   private async _parseRequest(
-    method: HttpMethod,
+    method: Method,
     url: string,
     requestConfig: RestClientRequestConfig,
     axiosConfig?: AxiosRequestConfig
@@ -81,11 +89,17 @@ export class RestClient {
     return await this._send(urlWithParams, method, axiosConfig);
   }
 
+  private _isMethod(method: string): method is Method {
+    return ['GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'OPTIONS', 'PATCH', 'PURGE', 'LINK', 'UNLINK'].includes(
+      method.toUpperCase()
+    );
+  }
+
   private _parseRequestURL(methodWithURL: string) {
     const split = methodWithURL.split(' ');
     if (split.length !== 2) throw new Error(`Invalid methodWithURL: ${methodWithURL}`);
     const [method, url] = split;
-    if (!['GET', 'POST', 'PUT', 'DELETE'].includes(method.toUpperCase())) throw new Error(`Invalid method: ${method}`);
+    if (!this._isMethod(method)) throw new Error(`Invalid method: ${method}`);
     return { method, url };
   }
 
@@ -96,8 +110,8 @@ export class RestClient {
     return url;
   }
 
-  private async _send(url: string, method: string = 'get', axiosConfig?: AxiosRequestConfig) {
-    return await axios.create().request({
+  private async _send(url: string, method: Method = 'get', axiosConfig?: AxiosRequestConfig) {
+    return await this._axiosInstance.request({
       // Override with root axiosConfig
       ...this._rootAxiosConfig,
       // Override with custom axiosConfig
