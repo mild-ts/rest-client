@@ -6,18 +6,6 @@
 
 - 52bb2ae: Publish dist from changesets (3)
 
-## 0.1.4
-
-### Patch Changes
-
-- bf56f2b: Publish dist from changesets (2)
-
-## 0.1.3
-
-### Patch Changes
-
-- Publish dist from changesets
-
 ## 0.1.2
 
 ### Patch Changes
