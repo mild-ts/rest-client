@@ -37,7 +37,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mildronize/utils.git"
+    "url": "https://github.com/mild-ts/rest-client.git"
   },
   "publishConfig": {
     "access": "public",
