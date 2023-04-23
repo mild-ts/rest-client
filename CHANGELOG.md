@@ -1,5 +1,11 @@
 # @mild-ts/rest-client
 
+## 0.3.0
+
+### Minor Changes
+
+- 1fb5ee0: change naming convetion for private prop to without underscore
+
 ## 0.2.1
 
 ### Patch Changes
