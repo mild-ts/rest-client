@@ -1,5 +1,11 @@
 # @mild-ts/rest-client
 
+## 0.2.0
+
+### Minor Changes
+
+- 4f69b47: config RestClientRequestConfig can be undefined
+
 ## 0.1.8
 
 ### Patch Changes
