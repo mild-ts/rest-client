@@ -1,5 +1,11 @@
 # @mild-ts/rest-client
 
+## 0.2.1
+
+### Patch Changes
+
+- 5f4540f: fix: correct package.json repo
+
 ## 0.2.0
 
 ### Minor Changes
