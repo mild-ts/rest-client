@@ -10,12 +10,12 @@ import { parseRequestURL, replaceParams } from './utils';
  */
 
 export class RestClient {
-  protected _axiosInstance: AxiosInstance;
-  protected _rootAxiosConfig: AxiosRequestConfig;
+  protected axiosInstance: AxiosInstance;
+  protected rootAxiosConfig: AxiosRequestConfig;
 
   constructor(config?: RestClientAxiosConfigs) {
-    this._rootAxiosConfig = config?.axiosConfig ?? {};
-    this._axiosInstance = config?.axiosInstance ?? axios.create();
+    this.rootAxiosConfig = config?.axiosConfig ?? {};
+    this.axiosInstance = config?.axiosInstance ?? axios.create();
   }
 
   /**
@@ -41,7 +41,7 @@ export class RestClient {
     requestConfig?: RestClientRequestConfig<false, T>,
     axiosConfig?: AxiosRequestConfig
   ) {
-    return await this._parseRequest('GET', url, requestConfig, axiosConfig);
+    return await this.parseRequest('GET', url, requestConfig, axiosConfig);
   }
 
   /**
@@ -56,7 +56,7 @@ export class RestClient {
     requestConfig?: RestClientRequestConfig<false, T>,
     axiosConfig?: AxiosRequestConfig
   ) {
-    return await this._parseRequest('POST', url, requestConfig, axiosConfig);
+    return await this.parseRequest('POST', url, requestConfig, axiosConfig);
   }
 
   /**
@@ -71,7 +71,7 @@ export class RestClient {
     requestConfig?: RestClientRequestConfig<false, T>,
     axiosConfig?: AxiosRequestConfig
   ) {
-    return await this._parseRequest('PUT', url, requestConfig, axiosConfig);
+    return await this.parseRequest('PUT', url, requestConfig, axiosConfig);
   }
 
   /**
@@ -86,7 +86,7 @@ export class RestClient {
     requestConfig?: RestClientRequestConfig<false, T>,
     axiosConfig?: AxiosRequestConfig
   ) {
-    return await this._parseRequest('DELETE', url, requestConfig, axiosConfig);
+    return await this.parseRequest('DELETE', url, requestConfig, axiosConfig);
   }
 
   /**
@@ -112,23 +112,23 @@ export class RestClient {
     axiosConfig?: AxiosRequestConfig
   ) {
     const { method, url } = parseRequestURL(methodWithURL);
-    return this._parseRequest(method, url, requestConfig, axiosConfig);
+    return this.parseRequest(method, url, requestConfig, axiosConfig);
   }
 
-  protected async _parseRequest(
+  protected async parseRequest(
     method: Method,
     url: string,
     requestConfig?: RestClientRequestConfig,
     axiosConfig?: AxiosRequestConfig
   ) {
     const urlWithParams = replaceParams(url, requestConfig?.params);
-    return await this._send(urlWithParams, method, axiosConfig);
+    return await this.send(urlWithParams, method, axiosConfig);
   }
 
-  protected async _send(url: string, method: Method = 'get', axiosConfig?: AxiosRequestConfig) {
-    return await this._axiosInstance.request<unknown>({
+  protected async send(url: string, method: Method = 'get', axiosConfig?: AxiosRequestConfig) {
+    return await this.axiosInstance.request<unknown>({
       // Override with root axiosConfig
-      ...this._rootAxiosConfig,
+      ...this.rootAxiosConfig,
       // Override with custom axiosConfig
       ...axiosConfig,
       url,
