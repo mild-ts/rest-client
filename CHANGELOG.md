@@ -1,5 +1,11 @@
 # @mild-ts/rest-client
 
+## 0.1.8
+
+### Patch Changes
+
+- 652fd06: Export util functions
+
 ## 0.1.7
 
 ### Patch Changes
