@@ -1,6 +1,6 @@
 {
   "name": "@mild-ts/rest-client",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "TypeScript Rest Client utility with Axios",
   "main": "./dist/main.js",
   "module": "./dist/main.mjs",
