@@ -1,5 +1,11 @@
 # @mild-ts/rest-client
 
+## 0.1.7
+
+### Patch Changes
+
+- ab74d5d: export type
+
 ## 0.1.6
 
 ### Patch Changes
