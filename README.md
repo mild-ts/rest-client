@@ -1,8 +1,14 @@
 # @mild-ts/rest-client
 
-Opinionated TypeScript Utility Libraries [@mild-ts](https://github.com/mildronize/mild-ts)
+Lightweight REST client helper function wrapping with type and [Axios](https://github.com/axios/axios)
 
 [![CI](https://github.com/mild-ts/rest-client/actions/workflows/main.yml/badge.svg)](https://github.com/mild-ts/rest-client/actions/workflows/main.yml) [![](https://img.shields.io/npm/v/@mild-ts/rest-client)](https://www.npmjs.com/package/@mild-ts/rest-client)
+
+## Introduction
+
+Lightweight REST client helper function with basic type support and [Axios](https://github.com/axios/axios) wrapper. However, if you need more type-safety, we recommend considering [untypeable](https://github.com/total-typescript/untypeable). 
+
+Alternatively, if you have control over both the server and client types, options like [tRPC](https://trpc.io/) or [GraphQL](https://graphql.org/) are great choices. So go ahead and choose the option that works best for your needs!
 
 ## Installation
 ```
@@ -25,3 +31,7 @@ async function main() {
 
 main();
 ```
+
+# API
+
+to be add later
