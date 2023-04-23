@@ -38,7 +38,7 @@ export class RestClient {
 
   public async get<T extends string>(
     url: T,
-    requestConfig: RestClientRequestConfig<false, T>,
+    requestConfig?: RestClientRequestConfig<false, T>,
     axiosConfig?: AxiosRequestConfig
   ) {
     return await this._parseRequest('GET', url, requestConfig, axiosConfig);
@@ -53,7 +53,7 @@ export class RestClient {
    */
   public async post<T extends string>(
     url: T,
-    requestConfig: RestClientRequestConfig<false, T>,
+    requestConfig?: RestClientRequestConfig<false, T>,
     axiosConfig?: AxiosRequestConfig
   ) {
     return await this._parseRequest('POST', url, requestConfig, axiosConfig);
@@ -68,7 +68,7 @@ export class RestClient {
    */
   public async put<T extends string>(
     url: T,
-    requestConfig: RestClientRequestConfig<false, T>,
+    requestConfig?: RestClientRequestConfig<false, T>,
     axiosConfig?: AxiosRequestConfig
   ) {
     return await this._parseRequest('PUT', url, requestConfig, axiosConfig);
@@ -83,7 +83,7 @@ export class RestClient {
    */
   public async delete<T extends string>(
     url: T,
-    requestConfig: RestClientRequestConfig<false, T>,
+    requestConfig?: RestClientRequestConfig<false, T>,
     axiosConfig?: AxiosRequestConfig
   ) {
     return await this._parseRequest('DELETE', url, requestConfig, axiosConfig);
@@ -108,7 +108,7 @@ export class RestClient {
 
   public async request<T extends `${Method} ${string}`>(
     methodWithURL: T,
-    requestConfig: RestClientRequestConfig<true, T>,
+    requestConfig?: RestClientRequestConfig<true, T>,
     axiosConfig?: AxiosRequestConfig
   ) {
     const { method, url } = parseRequestURL(methodWithURL);
@@ -118,10 +118,10 @@ export class RestClient {
   protected async _parseRequest(
     method: Method,
     url: string,
-    requestConfig: RestClientRequestConfig,
+    requestConfig?: RestClientRequestConfig,
     axiosConfig?: AxiosRequestConfig
   ) {
-    const urlWithParams = replaceParams(url, requestConfig.params);
+    const urlWithParams = replaceParams(url, requestConfig?.params);
     return await this._send(urlWithParams, method, axiosConfig);
   }
 

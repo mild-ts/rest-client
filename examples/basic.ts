@@ -15,6 +15,9 @@ async function main() {
     },
   });
   console.log(res2.data);
+
+  const res3 = await client.get('https://jsonplaceholder.typicode.com/posts/1/comments');
+  console.log(res3.data);
 }
 
 main();

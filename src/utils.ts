@@ -16,6 +16,7 @@ export function parseRequestURL(methodWithURL: string) {
 }
 
 export function replaceParams(url: string, params: RestClientRequestConfig['params']): string {
+  if(params === undefined) return url;
   for (const [key, value] of Object.entries(params)) {
     url = url.replace(`{${key}}`, value as string);
   }

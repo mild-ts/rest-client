@@ -41,7 +41,7 @@ type T = ExtractParamsFromRestURL<'GET https://jsonplaceholder.typicode.com/post
 type GetParams<WithMethod, T> = WithMethod extends true ? ExtractParamsFromRestURL<T> : ExtractParamsFromURL<T>;
 
 export type RestClientRequestConfig<WithMethod = false, T = any> = {
-  params: GetParams<WithMethod, T>;
+  params?: GetParams<WithMethod, T>;
 };
 
 export interface RestClientAxiosConfigs {
