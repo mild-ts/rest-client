@@ -32,6 +32,25 @@ async function main() {
 main();
 ```
 
+## Use with Axios Retry
+
+```ts
+import { RestClient } from '@mild-ts/rest-client';
+import axios from 'axios';
+import axiosRetry from 'axios-retry';
+
+// Create an an axios instance and apply axiosRetry
+const axiosInstance = axios.create();
+axiosRetry(axiosInstance, { retries: 3 });
+
+// Using axiosInstance in RestClient
+const client = new RestClient({
+  axiosInstance,
+});
+// This will retry 3 times
+await client.request('GET http://domain.com');
+```
+
 # API
 
 to be add later
