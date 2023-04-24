@@ -2,6 +2,12 @@ import axios, { AxiosInstance, AxiosRequestConfig, Method } from 'axios';
 import { RestClientAxiosConfigs, RestClientRequestConfig } from './types';
 import { parseRequestURL, replaceParams } from './utils';
 
+interface CreateOption<T> {
+  url: T;
+  method: Method;
+  axiosConfig?: AxiosRequestConfig;
+}
+
 /**
  * REST API client
  * @ref Inspired API design by GitHub REST API client
@@ -135,4 +141,36 @@ export class RestClient {
       method,
     });
   }
+
+  public create<T extends string>(option: CreateOption<T>) {
+    return this.setupRequest<T>(option.url, option.method);
+  }
+
+  public createRequest<T extends `${Method} ${string}`>(
+    methodWithURL: T,
+    requestConfig?: RestClientRequestConfig<true, T>,
+    axiosConfig?: AxiosRequestConfig
+  ) {
+    const { method, url } = parseRequestURL(methodWithURL);
+    return this.setupRequest<T>(url, method);
+  }
+
+  protected setupRequest<T>(url: string, method: Method) {
+    return {
+      params: (params: RestClientRequestConfig<false, T>['params']) => {
+        return this.setupRequest<T>(url, method);
+      },
+      input: (...data: any[]) => {
+        return this.setupRequest<T>(url, method);
+      },
+      output: (...data: any[]) => {
+        return this.setupRequest<T>(url, method);
+      },
+      send: (axiosConfig?: AxiosRequestConfig) => {
+        return this.parseRequest(method, url, {}, axiosConfig);
+      },
+    };
+  }
+
+  public createGet(...data: any[]) {}
 }

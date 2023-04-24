@@ -5,11 +5,14 @@ export type ExtractParamsFromURL<T> = Pipe<
   T,
   [
     Strings.Trim<"https://" | "http://">,
+    // Ignore query string
+    Strings.Split<"?">,
+    Tuples.At<0>,
     Strings.Split<"/">,
-    Tuples.Filter<Strings.StartsWith<"{">>,
+    Tuples.Filter<Strings.StartsWith<"{" | ":">>,
     Tuples.Map<
       ComposeLeft<[
-        Strings.Trim<"{" | "}">,
+        Strings.Trim<"{" | "}" | ":">,
         Strings.Append<":DEFAULT_TYPE">,
         Strings.Split<":">,
       ]>
@@ -18,15 +21,14 @@ export type ExtractParamsFromURL<T> = Pipe<
     Objects.FromEntries,
     Objects.MapValues<
       Match<[
-        Match.With<"DEFAULT_TYPE", string | number | null>,
+        Match.With<"DEFAULT_TYPE", string | number>,
       ]>
     >
   ]
 >;
 
-type Params = ExtractParamsFromURL<'https://jsonplaceholder.typicode.com/posts/{postId}/comments/{commentId}'>;
+type Params = ExtractParamsFromURL<'https://jsonplaceholder.typicode.com/posts/{postId}/comments/:commentId'>;
       // ^?
-
 
 export type ExtractParamsFromRestURL<T> = ExtractParamsFromURL<Pipe<
   T,
