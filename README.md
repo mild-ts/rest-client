@@ -2,7 +2,7 @@
 
 Lightweight REST client helper function wrapping with type and [Axios](https://github.com/axios/axios)
 
-[![CI](https://github.com/mild-ts/rest-client/actions/workflows/main.yml/badge.svg)](https://github.com/mild-ts/rest-client/actions/workflows/main.yml) [![](https://img.shields.io/npm/v/@mild-ts/rest-client)](https://www.npmjs.com/package/@mild-ts/rest-client)
+[![CI](https://github.com/mild-ts/rest-client/actions/workflows/main.yml/badge.svg)](https://github.com/mild-ts/rest-client/actions/workflows/main.yml) [![](https://img.shields.io/npm/v/@mild-ts/rest-client)](https://www.npmjs.com/package/@mild-ts/rest-client) [![](https://img.shields.io/npm/dt/@mild-ts/rest-client)](https://www.npmjs.com/package/@mild-ts/rest-client) 
 
 ## Introduction
 
