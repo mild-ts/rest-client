@@ -42,12 +42,8 @@ export class RestClient {
    * @returns AxiosResponse
    */
 
-  public async get<T extends string>(
-    url: T,
-    requestConfig?: RestClientRequestConfig<false, T>,
-    axiosConfig?: AxiosRequestConfig
-  ) {
-    return await this.parseRequest('GET', url, requestConfig, axiosConfig);
+  public async get<T extends string>(url: T, requestConfig?: RestClientRequestConfig<false, T>) {
+    return await this.parseRequest('GET', url, requestConfig, requestConfig?.axiosConfig);
   }
 
   /**
@@ -57,12 +53,8 @@ export class RestClient {
    * @param axiosConfig Axios Request config
    * @returns AxiosResponse
    */
-  public async post<T extends string>(
-    url: T,
-    requestConfig?: RestClientRequestConfig<false, T>,
-    axiosConfig?: AxiosRequestConfig
-  ) {
-    return await this.parseRequest('POST', url, requestConfig, axiosConfig);
+  public async post<T extends string>(url: T, requestConfig?: RestClientRequestConfig<false, T>) {
+    return await this.parseRequest('POST', url, requestConfig, requestConfig?.axiosConfig);
   }
 
   /**
@@ -72,12 +64,8 @@ export class RestClient {
    * @param axiosConfig Axios Request config
    * @returns AxiosResponse
    */
-  public async put<T extends string>(
-    url: T,
-    requestConfig?: RestClientRequestConfig<false, T>,
-    axiosConfig?: AxiosRequestConfig
-  ) {
-    return await this.parseRequest('PUT', url, requestConfig, axiosConfig);
+  public async put<T extends string>(url: T, requestConfig?: RestClientRequestConfig<false, T>) {
+    return await this.parseRequest('PUT', url, requestConfig, requestConfig?.axiosConfig);
   }
 
   /**
@@ -87,12 +75,8 @@ export class RestClient {
    * @param axiosConfig Axios Request config
    * @returns AxiosResponse
    */
-  public async delete<T extends string>(
-    url: T,
-    requestConfig?: RestClientRequestConfig<false, T>,
-    axiosConfig?: AxiosRequestConfig
-  ) {
-    return await this.parseRequest('DELETE', url, requestConfig, axiosConfig);
+  public async delete<T extends string>(url: T, requestConfig?: RestClientRequestConfig<false, T>) {
+    return await this.parseRequest('DELETE', url, requestConfig, requestConfig?.axiosConfig);
   }
 
   /**
@@ -114,11 +98,10 @@ export class RestClient {
 
   public async request<T extends `${Method} ${string}`>(
     methodWithURL: T,
-    requestConfig?: RestClientRequestConfig<true, T>,
-    axiosConfig?: AxiosRequestConfig
+    requestConfig?: RestClientRequestConfig<true, T>
   ) {
     const { method, url } = parseRequestURL(methodWithURL);
-    return this.parseRequest(method, url, requestConfig, axiosConfig);
+    return this.parseRequest(method, url, requestConfig, requestConfig?.axiosConfig);
   }
 
   protected async parseRequest(

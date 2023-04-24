@@ -9,6 +9,7 @@ export type ExtractParamsFromURL<T> = Pipe<
     Strings.Split<"?">,
     Tuples.At<0>,
     Strings.Split<"/">,
+    // Support Express-like path params (#11), e.g. /posts/:postId/comments/:commentId
     Tuples.Filter<Strings.StartsWith<"{" | ":">>,
     Tuples.Map<
       ComposeLeft<[
@@ -44,6 +45,7 @@ type GetParams<WithMethod, T> = WithMethod extends true ? ExtractParamsFromRestU
 
 export type RestClientRequestConfig<WithMethod = false, T = any> = {
   params?: GetParams<WithMethod, T>;
+  axiosConfig?: AxiosRequestConfig;
 };
 
 export interface RestClientAxiosConfigs {
