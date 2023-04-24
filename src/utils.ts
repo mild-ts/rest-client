@@ -20,5 +20,9 @@ export function replaceParams(url: string, params: RestClientRequestConfig['para
   for (const [key, value] of Object.entries(params)) {
     url = url.replace(`{${key}}`, value as string);
   }
-  return url;
+  const pathWithParams = url.replace(
+    /:([a-zA-Z0-9_]+)/g,
+    (_, key) => params[key as keyof typeof params],
+  );
+  return pathWithParams;
 }

@@ -9,14 +9,18 @@ async function main() {
   });
   console.log(res.data);
 
-  const res2 = await client.get('https://jsonplaceholder.typicode.com/posts/{postId}/comments', {
+  const res2 = await client.request('GET https://jsonplaceholder.typicode.com/posts/:postId/comments', {
     params: {
       postId: 1,
     }
   });
   console.log(res2.data);
 
-  const res3 = await client.get('https://jsonplaceholder.typicode.com/posts/1/comments');
+  const res3 = await client.get('https://jsonplaceholder.typicode.com/posts/{postId}/comments', {
+    params: {
+      postId: 1,
+    }
+  });
   console.log(res3.data);
 }
 

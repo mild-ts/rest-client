@@ -42,4 +42,8 @@ test('test replaceParams', t => {
   t.is(replaceParams('/{id}', { id: '1' }), '/1');
   t.is(replaceParams('/{id}/{name}', { id: '1', name: '2' }), '/1/2');
   t.is(replaceParams('/{id}/{name}', { id: '1', name: '2', other: '3' }), '/1/2');
+
+  t.is(replaceParams('/:id', { id: '1' }), '/1');
+  t.is(replaceParams('/:id/:name', { id: '1', name: '2' }), '/1/2');
+  t.is(replaceParams('/:id/:name', { id: '1', name: '2', other: '3' }), '/1/2');
 });
