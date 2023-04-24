@@ -12,7 +12,7 @@ async function main() {
   const res2 = await client.get('https://jsonplaceholder.typicode.com/posts/{postId}/comments', {
     params: {
       postId: 1,
-    },
+    }
   });
   console.log(res2.data);
 

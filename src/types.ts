@@ -42,6 +42,7 @@ type GetParams<WithMethod, T> = WithMethod extends true ? ExtractParamsFromRestU
 
 export type RestClientRequestConfig<WithMethod = false, T = any> = {
   params?: GetParams<WithMethod, T>;
+  axiosConfig?: AxiosRequestConfig;
 };
 
 export interface RestClientAxiosConfigs {
