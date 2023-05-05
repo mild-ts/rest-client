@@ -1,8 +1,8 @@
-# @mild-ts/rest-client
+# @thaitype/rest-client
 
 Lightweight REST client helper function wrapping with type and [Axios](https://github.com/axios/axios)
 
-[![CI](https://github.com/mild-ts/rest-client/actions/workflows/main.yml/badge.svg)](https://github.com/mild-ts/rest-client/actions/workflows/main.yml) [![](https://img.shields.io/npm/v/@mild-ts/rest-client)](https://www.npmjs.com/package/@mild-ts/rest-client) [![](https://img.shields.io/npm/dt/@mild-ts/rest-client)](https://www.npmjs.com/package/@mild-ts/rest-client) 
+[![CI](https://github.com/thaitype/rest-client/actions/workflows/main.yml/badge.svg)](https://github.com/thaitype/rest-client/actions/workflows/main.yml) [![](https://img.shields.io/npm/v/@thaitype/rest-client)](https://www.npmjs.com/package/@thaitype/rest-client) [![](https://img.shields.io/npm/dt/@thaitype/rest-client)](https://www.npmjs.com/package/@thaitype/rest-client) 
 
 ## Introduction
 
@@ -12,12 +12,12 @@ Alternatively, if you have control over both the server and client types, option
 
 ## Installation
 ```
-npm i @mild-ts/rest-client
+npm i @thaitype/rest-client
 ```
 
 ### Examples
 ```ts
-import { RestClient } from '@mild-ts/rest-client';
+import { RestClient } from '@thaitype/rest-client';
 
 async function main() {
   const client = new RestClient();
@@ -35,7 +35,7 @@ main();
 ## Use with Axios Retry
 
 ```ts
-import { RestClient } from '@mild-ts/rest-client';
+import { RestClient } from '@thaitype/rest-client';
 import axios from 'axios';
 import axiosRetry from 'axios-retry';
 
