@@ -1,4 +1,5 @@
 import client, { RestClient } from '../src/main';
+import { z } from 'zod';
 
 async function main() {
   const client = new RestClient();
@@ -12,31 +13,36 @@ async function main() {
   const res2 = await client.request('GET https://jsonplaceholder.typicode.com/posts/:postId/comments', {
     params: {
       postId: 1,
-    }
+    },
   });
   console.log(res2.data);
 
   const res3 = await client.get('https://jsonplaceholder.typicode.com/posts/1/comments');
 
-  const tmp = client
+  const tmp = await client
     .createRequest('GET https://jsonplaceholder.typicode.com/posts/{postId}/comments', {
-      params: {
-        postId: 1,
-      }
+      headers: {
+        'Content-Type': 'application/json',
+      },
     })
     .input(z.string())
-    .output(z.string())
-    .send();
-
-        // .params({
-    //   postId: '1',
-    //   // subscriptionId: '29523625-6fa5-4d9a-86bc-da000544be7d',
-    //   // resourceGroupName: 'rg-thadaw-demo-multi-app',
-    //   // name: 'thadaw-demo-multi-app-ant',
-    // })
-    //query string or post body
-
-  client.createGet('https://jsonplaceholder.typicode.com/posts/{postId}/comments');
+    .output(
+      z.object({
+        id: z.number(),
+        title: z.string(),
+      })
+    )
+    .send({
+      params: {
+        postId: 1,
+      },
+      // AxiosRequestConfig.data
+      input: 'hello',
+      // queries
+      queries: {
+        id: '1',
+      },
+    });
 
   console.log(res3.data);
 }
