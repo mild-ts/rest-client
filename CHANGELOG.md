@@ -1,5 +1,11 @@
 # @mild-ts/rest-client
 
+## 0.4.1
+
+### Patch Changes
+
+- a19c578: Migrate to new npm org `thaitype`
+
 ## 0.4.0
 
 ### Minor Changes
