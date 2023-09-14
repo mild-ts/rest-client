@@ -1,5 +1,11 @@
 # @mild-ts/rest-client
 
+## 0.5.0
+
+### Minor Changes
+
+- fe40d47: Support Params with Query String
+
 ## 0.4.1
 
 ### Patch Changes
