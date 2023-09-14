@@ -1,48 +1,56 @@
-import { AxiosInstance, AxiosRequestConfig } from "axios";
-import { Pipe, Objects, Strings, ComposeLeft, Tuples, Match } from "hotscript";
+import { AxiosInstance, AxiosRequestConfig } from 'axios';
+import { Pipe, Objects, Strings, ComposeLeft, Tuples, Match } from 'hotscript';
 
-export type ExtractParamsFromURL<T> = Pipe<
+type PrimitiveType = string | number | boolean;
+
+type ProcessParams = [
+  Tuples.Map<ComposeLeft<[Strings.Trim<'{' | '}' | ':'>, Strings.Append<':DEFAULT_TYPE'>, Strings.Split<':'>]>>,
+  Tuples.ToUnion,
+  Objects.FromEntries,
+  Objects.MapValues<Match<[Match.With<'DEFAULT_TYPE', PrimitiveType>]>>
+];
+
+export type ExtractParamsFromURLWithoutQueryString<T> = Pipe<
   T,
   [
-    Strings.Trim<"https://" | "http://">,
+    Strings.Trim<'https://' | 'http://'>,
     // Ignore query string
-    Strings.Split<"?">,
+    Strings.Split<'?'>,
     Tuples.At<0>,
-    Strings.Split<"/">,
+    Strings.Split<'/'>,
     // Support Express-like path params (#11), e.g. /posts/:postId/comments/:commentId
-    Tuples.Filter<Strings.StartsWith<"{" | ":">>,
-    Tuples.Map<
-      ComposeLeft<[
-        Strings.Trim<"{" | "}" | ":">,
-        Strings.Append<":DEFAULT_TYPE">,
-        Strings.Split<":">,
-      ]>
-    >,
-    Tuples.ToUnion,
-    Objects.FromEntries,
-    Objects.MapValues<
-      Match<[
-        Match.With<"DEFAULT_TYPE", string | number>,
-      ]>
-    >
+    Tuples.Filter<Strings.StartsWith<'{' | ':'>>,
+    ...ProcessParams
   ]
 >;
 
-type Params = ExtractParamsFromURL<'https://jsonplaceholder.typicode.com/posts/{postId}/comments/:commentId'>;
-      // ^?
-
-
-export type ExtractParamsFromRestURL<T> = ExtractParamsFromURL<Pipe<
+export type ExtractParamsFromURLQueryString<T> = Pipe<
   T,
   [
-    Strings.Split<' '>
+    Strings.Trim<'https://' | 'http://'>,
+    // Using only query string
+    Strings.Split<'?'>,
+    Tuples.At<1>,
+    Strings.Split<'&'>,
+    Tuples.Map<
+      ComposeLeft<[
+        Strings.Split<'='>,
+        Tuples.Filter<Strings.StartsWith<'{' | ':'>>,
+        Tuples.ToUnion
+      ]>
+    >,
+    ...ProcessParams
   ]
-  >[1]>;
+>;
 
-type T = ExtractParamsFromRestURL<'GET https://jsonplaceholder.typicode.com/posts/{postId}/comments/{commentId}'>;
-  // ^?
+export type ExtractParamsFromURL<T> = ExtractParamsFromURLQueryString<T> & ExtractParamsFromURLWithoutQueryString<T>;
 
-type GetParams<WithMethod, T> = WithMethod extends true ? ExtractParamsFromRestURL<T> : ExtractParamsFromURL<T>;
+export type ExtractParamsFromRestURL<T> = ExtractParamsFromURL<Pipe<T, [Strings.Split<' '>]>[1]>;
+
+
+type GetParams<WithMethod, T> = WithMethod extends true
+  ? ExtractParamsFromRestURL<T>
+  : ExtractParamsFromURL<T>;
 
 export type RestClientRequestConfig<WithMethod = false, T = any> = {
   params?: GetParams<WithMethod, T>;

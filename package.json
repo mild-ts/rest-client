@@ -18,15 +18,15 @@
     "test": "ava"
   },
   "peerDependencies": {
-    "typescript": "^5.0.2"
+    "hotscript": ">=1.0.13"
   },
   "devDependencies": {
     "@changesets/cli": "^2.26.0",
     "@types/node": "^18.11.18",
     "ava": "^5.1.1",
     "c8": "^7.12.0",
+    "hotscript": "^1.0.13",
     "esbuild-register": "^3.4.2",
-    "hotscript": "^1.0.11",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.8.3",
     "tsup": "^6.6.3",
